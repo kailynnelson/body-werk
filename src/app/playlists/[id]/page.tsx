@@ -234,15 +234,15 @@ export default function PlaylistPage() {
           if (!item.track) return null;
           return (
             <div
-              key={item.track.id}
+              key={item.track?.id}
               className="group flex items-center gap-4 p-3 rounded-lg hover:bg-white/10 transition-colors"
             >
               <div className="w-12 text-center text-white/50">{index + 1}</div>
               
-              {item.track.album.images[0] && (
+              {item.track?.album.images[0] && (
                 <Image
-                  src={item.track.album.images[0].url}
-                  alt={item.track.album.name}
+                  src={item.track?.album.images[0].url}
+                  alt={item.track?.album.name}
                   width={48}
                   height={48}
                   className="w-12 h-12 rounded shadow"
@@ -250,15 +250,15 @@ export default function PlaylistPage() {
               )}
               
               <div className="flex-grow min-w-0">
-                <div className="font-medium truncate">{item.track.name}</div>
+                <div className="font-medium truncate">{item.track?.name}</div>
                 <div className="text-sm text-white/70 truncate">
-                  {item.track.artists.map(a => a.name).join(", ")}
+                  {item.track?.artists.map(a => a.name).join(", ")}
                 </div>
               </div>
 
-              {item.track.preview_url && (
+              {item.track?.preview_url && (
                 <button
-                  onClick={() => handlePlayPreview(item.track.id, item.track.preview_url)}
+                  onClick={() => handlePlayPreview(item.track?.id!, item.track?.preview_url!)}
                   className={`p-2 rounded-full ${
                     item.isPlaying
                       ? "bg-green-500 text-white"
