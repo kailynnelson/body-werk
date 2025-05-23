@@ -1,14 +1,5 @@
 import SpotifyWebApi from "spotify-web-api-node";
 
-interface SpotifyTrack {
-  track: {
-    id: string;
-    name: string;
-    uri: string;
-    artists: Array<{ name: string }>;
-  } | null;
-}
-
 export const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
@@ -97,6 +88,12 @@ export const getTracksAudioFeatures = async (accessToken: string, trackIds: stri
   }
 };
 
+interface CreatePlaylistOptions {
+  name: string;
+  description: string;
+  public: boolean;
+}
+
 export const createPlaylist = async (
   accessToken: string,
   userId: string,
@@ -105,12 +102,12 @@ export const createPlaylist = async (
 ) => {
   spotifyApi.setAccessToken(accessToken);
   try {
-    const createResponse = await spotifyApi.createPlaylist(userId, {
+    const options: CreatePlaylistOptions = {
       name: playlistName,
       description: playlistDescription,
       public: false,
-    } as any);
-    
+    };
+    const createResponse = await spotifyApi.createPlaylist(userId, options as any);
     return createResponse.body;
   } catch (error) {
     console.error('Error in createPlaylist:', error);

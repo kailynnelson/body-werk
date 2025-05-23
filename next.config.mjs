@@ -1,14 +1,8 @@
 /** @type {import('next').NextConfig} */
-import { readFileSync } from 'fs';
-import { join } from 'path';
-
 const nextConfig = {
-  server: process.env.NODE_ENV === 'development' ? {
-    https: {
-      key: readFileSync('./certificates/key.pem'),
-      cert: readFileSync('./certificates/cert.pem'),
-    },
-  } : {},
+  images: {
+    domains: ['i.scdn.co', 'mosaic.scdn.co', 'platform-lookaside.fbsbx.com'],
+  }
 };
 
 export default nextConfig; 

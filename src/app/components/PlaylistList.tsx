@@ -210,7 +210,7 @@ export default function PlaylistList() {
 
       {filteredPlaylists.length === 0 && searchQuery && (
         <p className="text-center text-white/70">
-          No playlists found matching "{searchQuery}"
+          No playlists found matching &quot;{searchQuery}&quot;
         </p>
       )}
 
