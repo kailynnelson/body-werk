@@ -18,13 +18,6 @@ interface SpotifyProfile {
   images?: { url: string }[];
 }
 
-// Extend the built-in session type
-interface ExtendedSession extends DefaultSession {
-  accessToken?: string;
-  error?: string;
-}
-
-// Spotify scopes from official documentation
 const scopes = [
   'playlist-read-private',
   'playlist-read-collaborative',
@@ -34,55 +27,42 @@ const scopes = [
   'user-read-private',
   'user-read-playback-state',
   'user-modify-playback-state',
-  'user-library-read',
-  'user-library-modify',
-  'user-top-read',
-  'user-read-recently-played',
-  'user-follow-read',
-  'user-follow-modify',
-  'streaming',
-  'app-remote-control',
-  'user-read-currently-playing',
-  'ugc-image-upload'
 ].join(' ');
 
 async function refreshAccessToken(token: ExtendedToken): Promise<ExtendedToken> {
   try {
-    console.log("Refreshing access token...");
-    
-    const response = await fetch("https://accounts.spotify.com/api/token", {
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `Basic ${Buffer.from(
-          `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`
-        ).toString("base64")}`,
+        'Authorization': 'Basic ' + Buffer.from(
+          process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET
+        ).toString('base64'),
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        grant_type: "refresh_token",
+        grant_type: 'refresh_token',
         refresh_token: token.refreshToken,
       }),
-      method: "POST",
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      throw data;
+      throw new Error('Failed to refresh access token');
     }
 
     console.log("Token refreshed successfully");
-    
+
     return {
       ...token,
       accessToken: data.access_token,
-      refreshToken: data.refresh_token ?? token.refreshToken,
-      expiresAt: Date.now() + data.expires_in * 1000,
+      expiresAt: Date.now() + (data.expires_in * 1000),
     };
   } catch (error) {
-    console.error("Error refreshing access token:", error);
+    console.error('Error refreshing access token:', error);
     return {
       ...token,
-      error: "RefreshAccessTokenError",
+      error: 'RefreshAccessTokenError',
     };
   }
 }
@@ -95,7 +75,7 @@ const handler = NextAuth({
       authorization: {
         params: {
           scope: scopes,
-          show_dialog: true, // Force re-consent
+          show_dialog: true,
           access_type: 'offline',
           response_type: 'code',
         },
@@ -153,17 +133,11 @@ const handler = NextAuth({
         session.user.id = token.id as string;
       }
       
-      session.accessToken = extendedToken.accessToken;
-      session.refreshToken = extendedToken.refreshToken;
-      session.expiresAt = extendedToken.expiresAt;
-      
-      console.log("Session updated with token:", {
-        userId: session.user?.id,
-        tokenEnd: session.accessToken?.slice(-10),
-        expiresIn: Math.round((session.expiresAt - Date.now()) / 1000 / 60) + " minutes"
-      });
-      
-      return session;
+      return {
+        ...session,
+        accessToken: extendedToken.accessToken,
+        error: extendedToken.error,
+      };
     },
   },
   debug: process.env.NODE_ENV === 'development',
