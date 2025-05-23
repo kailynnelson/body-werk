@@ -13,11 +13,10 @@ export default function CreditsPage() {
           </p>
           <a 
             href="https://getsongbpm.com"
-            target="_blank"
             className="inline-block bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md 
                      transition-colors duration-200"
           >
-            Visit GetSongBPM
+            GetSongBPM - The Ultimate BPM Database
           </a>
         </div>
       </section>
