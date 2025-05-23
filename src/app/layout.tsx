@@ -2,6 +2,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "./providers/AuthProvider";
 import { metadata } from "./metadata";
+import CreditsButton from "@/components/CreditsButton";
+import LogoButton from "@/components/LogoButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +25,8 @@ export default function RootLayout({
           <main className="relative container mx-auto px-4 py-8">
             {children}
           </main>
+          <LogoButton />
+          <CreditsButton />
         </AuthProvider>
       </body>
     </html>
