@@ -3,12 +3,12 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 const nextConfig = {
-  server: {
+  server: process.env.NODE_ENV === 'development' ? {
     https: {
       key: readFileSync('./certificates/key.pem'),
       cert: readFileSync('./certificates/cert.pem'),
     },
-  },
+  } : {},
 };
 
 export default nextConfig; 
