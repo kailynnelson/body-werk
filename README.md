@@ -1,24 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Body Werk - Spotify Playlist Danceability Sorter
 
-## Getting Started
+A mobile-first web application that allows users to:
+1. Log in with their Spotify account
+2. Select one of their playlists
+3. Create a new copy of that playlist, sorted by danceability score
 
-First, run the development server:
+## Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+1. Create a Spotify Developer account and register your application at [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+2. Create a `.env.local` file in the root directory with the following variables:
+```env
+SPOTIFY_CLIENT_ID=your_client_id
+SPOTIFY_CLIENT_SECRET=your_client_secret
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_random_string
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Features
+
+- Secure Spotify OAuth authentication
+- Mobile-first responsive design
+- Playlist selection interface
+- Automatic playlist sorting by danceability
+- Modern, clean UI with Tailwind CSS
+
+## Tech Stack
+
+- Next.js
+- TypeScript
+- Tailwind CSS
+- NextAuth.js
+- Spotify Web API
 
 ## Learn More
 

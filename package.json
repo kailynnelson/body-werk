@@ -4,24 +4,29 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "https-dev": "local-ssl-proxy --source 3000 --target 3001 & next dev --turbopack --port 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/spotify-web-api-node": "^5.0.11",
+    "next": "15.3.2",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.2"
+    "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
-    "@eslint/eslintrc": "^3"
+    "local-ssl-proxy": "^2.0.5",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
