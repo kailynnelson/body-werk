@@ -114,7 +114,8 @@ export default function PlaylistList() {
     if (observer.current) observer.current.disconnect();
 
     observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
+      const firstEntry = entries[0];
+      if (firstEntry && firstEntry.isIntersecting) {
         setVisibleCount(prev => prev + PLAYLISTS_PER_PAGE);
       }
     });
@@ -181,7 +182,7 @@ export default function PlaylistList() {
             onClick={() => handlePlaylistClick(playlist.id)}
             className="playlist-card bg-white/10 backdrop-blur-md rounded-lg p-4 hover:bg-white/15 transition-all duration-300 cursor-pointer border border-white/20 hover:border-pink-500/30 shadow-lg hover:shadow-pink-500/20"
           >
-            {playlist.images?.length > 0 && (
+            {playlist.images?.[0]?.url && (
               <Image
                 src={playlist.images[0].url}
                 alt={`${playlist.name} cover`}
