@@ -35,7 +35,7 @@ async function refreshAccessToken(token: ExtendedToken): Promise<ExtendedToken> 
       method: 'POST',
       headers: {
         'Authorization': 'Basic ' + Buffer.from(
-          process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET
+          process.env['SPOTIFY_CLIENT_ID'] + ':' + process.env['SPOTIFY_CLIENT_SECRET']
         ).toString('base64'),
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -70,8 +70,8 @@ async function refreshAccessToken(token: ExtendedToken): Promise<ExtendedToken> 
 const handler = NextAuth({
   providers: [
     SpotifyProvider({
-      clientId: process.env.SPOTIFY_CLIENT_ID!,
-      clientSecret: process.env.SPOTIFY_CLIENT_SECRET!,
+      clientId: process.env['SPOTIFY_CLIENT_ID']!,
+      clientSecret: process.env['SPOTIFY_CLIENT_SECRET']!,
       authorization: {
         params: {
           scope: scopes,
@@ -82,7 +82,7 @@ const handler = NextAuth({
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env['NEXTAUTH_SECRET'],
   session: {
     strategy: 'jwt',
   },
