@@ -94,6 +94,26 @@ interface CreatePlaylistOptions {
   public: boolean;
 }
 
+interface SpotifyTrack {
+  id: string;
+  name: string;
+  uri: string;
+}
+
+interface SpotifyPlaylistResponse {
+  id: string;
+  name: string;
+  description?: string | null;
+  public?: boolean | null;
+  collaborative?: boolean | null;
+  tracks: {
+    total: number;
+    items: Array<{
+      track: SpotifyTrack | null;
+    }>;
+  };
+}
+
 export const createPlaylist = async (
   accessToken: string,
   userId: string,
@@ -107,8 +127,8 @@ export const createPlaylist = async (
       description: playlistDescription,
       public: false,
     };
-    const createResponse = await spotifyApi.createPlaylist(userId, options as any);
-    return createResponse.body;
+    const createResponse = await spotifyApi.createPlaylist(userId, options);
+    return createResponse.body as SpotifyPlaylistResponse;
   } catch (error) {
     console.error('Error in createPlaylist:', error);
     throw error;
