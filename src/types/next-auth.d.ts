@@ -5,6 +5,16 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     accessToken?: string;
     error?: string;
+    user?: {
+      id?: string;
+    } & DefaultSession["user"];
+  }
+
+  interface Profile {
+    id: string;
+    display_name: string;
+    email: string;
+    images?: { url: string }[];
   }
 }
 
@@ -13,6 +23,7 @@ declare module "next-auth/jwt" {
     accessToken?: string;
     refreshToken?: string;
     accessTokenExpires?: number;
+    id?: string;
     error?: string;
   }
 } 

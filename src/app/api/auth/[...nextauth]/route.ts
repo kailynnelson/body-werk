@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
 import { JWT } from "next-auth/jwt";
 
@@ -6,6 +6,21 @@ interface ExtendedToken extends JWT {
   accessToken: string;
   refreshToken: string;
   expiresAt: number;
+  error?: string;
+  id?: string;
+}
+
+// Add Spotify profile type
+interface SpotifyProfile {
+  id: string;
+  display_name: string;
+  email: string;
+  images?: { url: string }[];
+}
+
+// Extend the built-in session type
+interface ExtendedSession extends DefaultSession {
+  accessToken?: string;
   error?: string;
 }
 
@@ -98,11 +113,12 @@ const handler = NextAuth({
     async jwt({ token, account, profile }) {
       // Initial sign in
       if (account && profile) {
+        const spotifyProfile = profile as SpotifyProfile;
         console.log("Initial sign in, setting token with account:", {
           accessToken: account.access_token?.slice(-10),
           refreshToken: account.refresh_token?.slice(-10),
           expiresAt: account.expires_at,
-          profile: profile.id
+          profile: spotifyProfile.id
         });
         
         return {
@@ -110,7 +126,7 @@ const handler = NextAuth({
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
           expiresAt: (account.expires_at || 0) * 1000,
-          id: profile.id,
+          id: spotifyProfile.id,
         } as ExtendedToken;
       }
 

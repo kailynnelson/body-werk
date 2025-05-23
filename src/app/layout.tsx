@@ -24,9 +24,9 @@ export default function RootLayout({
         <AuthProvider>
           <main className="relative container mx-auto px-4 py-8">
             {children}
+            <LogoButton />
+            <CreditsButton />
           </main>
-          <LogoButton />
-          <CreditsButton />
         </AuthProvider>
       </body>
     </html>
