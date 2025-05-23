@@ -2,7 +2,8 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import Image from "next/image";
 
 interface SpotifyTrack {
   track: {
@@ -49,7 +50,6 @@ const rateLimitedFetch = async (url: string, options: RequestInit) => {
 
 export default function PlaylistPage() {
   const { id } = useParams();
-  const router = useRouter();
   const { data: session, status } = useSession();
   const [tracks, setTracks] = useState<TrackWithPlayState[]>([]);
   const [playlist, setPlaylist] = useState<PlaylistDetails | null>(null);
@@ -214,9 +214,11 @@ export default function PlaylistPage() {
       {/* Playlist Header */}
       <div className="flex items-center gap-6">
         {playlist?.images?.[0] && (
-          <img 
+          <Image 
             src={playlist.images[0].url} 
             alt={playlist.name}
+            width={128}
+            height={128}
             className="w-32 h-32 rounded-lg shadow-lg"
           />
         )}
@@ -238,9 +240,11 @@ export default function PlaylistPage() {
               <div className="w-12 text-center text-white/50">{index + 1}</div>
               
               {item.track.album.images[0] && (
-                <img
+                <Image
                   src={item.track.album.images[0].url}
                   alt={item.track.album.name}
+                  width={48}
+                  height={48}
                   className="w-12 h-12 rounded shadow"
                 />
               )}
@@ -248,7 +252,7 @@ export default function PlaylistPage() {
               <div className="flex-grow min-w-0">
                 <div className="font-medium truncate">{item.track.name}</div>
                 <div className="text-sm text-white/70 truncate">
-                  {item.track.artists.map(a => a.name).join(', ')}
+                  {item.track.artists.map(a => a.name).join(", ")}
                 </div>
               </div>
 
@@ -257,8 +261,8 @@ export default function PlaylistPage() {
                   onClick={() => handlePlayPreview(item.track.id, item.track.preview_url)}
                   className={`p-2 rounded-full ${
                     item.isPlaying
-                      ? 'bg-green-500 text-white'
-                      : 'bg-white/10 text-white/70 hover:bg-white/20'
+                      ? "bg-green-500 text-white"
+                      : "bg-white/10 text-white/70 hover:bg-white/20"
                   }`}
                 >
                   {item.isPlaying ? '⏸' : '▶'}
