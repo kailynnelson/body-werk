@@ -3,7 +3,6 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
 
 interface SpotifyTrack {
   track: {
@@ -28,12 +27,25 @@ interface PlaylistDetails {
   images: Array<{ url: string }>;
 }
 
-// Utility function for rate limiting
+// Utility functions and constants
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-// Batch size for track fetching
 const BATCH_SIZE = 20;
 const RATE_LIMIT_DELAY = 1000;
+
+// Rate-limited fetch function
+const rateLimitedFetch = async (url: string, options: RequestInit) => {
+  const response = await fetch(url, options);
+  
+  if (response.status === 429) {
+    const retryAfter = response.headers.get('Retry-After');
+    const delayMs = (parseInt(retryAfter || '1') + 1) * 1000;
+    console.log(`Rate limited. Waiting ${delayMs}ms before retry...`);
+    await delay(delayMs);
+    return rateLimitedFetch(url, options);
+  }
+  
+  return response;
+};
 
 export default function PlaylistPage() {
   const { id } = useParams();
@@ -47,21 +59,6 @@ export default function PlaylistPage() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [currentlyPlaying, setCurrentlyPlaying] = useState<string | null>(null);
   const fetchInProgress = useRef(false);
-
-  // Rate-limited fetch function
-  const rateLimitedFetch = async (url: string, options: RequestInit) => {
-    const response = await fetch(url, options);
-    
-    if (response.status === 429) {
-      const retryAfter = response.headers.get('Retry-After');
-      const delayMs = (parseInt(retryAfter || '1') + 1) * 1000;
-      console.log(`Rate limited. Waiting ${delayMs}ms before retry...`);
-      await delay(delayMs);
-      return rateLimitedFetch(url, options);
-    }
-    
-    return response;
-  };
 
   const handlePlayPreview = useCallback((trackId: string, previewUrl: string | null) => {
     if (!previewUrl) {

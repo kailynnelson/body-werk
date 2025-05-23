@@ -1,5 +1,14 @@
 import SpotifyWebApi from "spotify-web-api-node";
 
+interface SpotifyTrack {
+  track: {
+    id: string;
+    name: string;
+    uri: string;
+    artists: Array<{ name: string }>;
+  } | null;
+}
+
 export const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
   clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
@@ -25,7 +34,7 @@ export const getUserPlaylists = async (accessToken: string) => {
 export const getPlaylistTracks = async (accessToken: string, playlistId: string) => {
   spotifyApi.setAccessToken(accessToken);
   try {
-    let allTracks = [];
+    const allTracks = [];
     let offset = 0;
     const limit = 50; // Smaller batch size to be safe
     
@@ -40,7 +49,7 @@ export const getPlaylistTracks = async (accessToken: string, playlistId: string)
       
       // Filter out null tracks and ensure proper track structure
       const validTracks = response.body.items.filter(
-        (item: any) => item && item.track && item.track.id && item.track.name
+        (item) => item?.track?.id && item?.track?.name && item?.track?.uri
       );
       
       allTracks.push(...validTracks);
